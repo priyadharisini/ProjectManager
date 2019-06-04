@@ -1,0 +1,27 @@
+<ul class="list-group">
+    <li *ngFor="let user of users | DataFilterPipe: searchQuery" class="list-group-item">
+      <div class="row">
+        <div class="col col-md-10">
+          <input type="hidden" value="{{user.UserId }}" name="empId" id="empId">
+          <p>{{ user.FirstName }} </p>
+          <p>{{ user.LastName }}</p>
+          <p>{{ user.EmployeeId }}</p>
+        </div>
+        <div class="col col-md-2">
+          <div class="row">
+            <div class="col col-12">
+              <button class="btn btn-success btn-block" type="button" (click)="editUser(user)" i18n="@@Edit">Edit</button>
+              <br>
+              <button class="btn btn-danger btn-block" type="button" (click)="deleteUser(user)" i18n="@@Delete">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  
+    <!-- <li *ngIf="(users | FilterPipe: searchQuery).length == 0" class="list-group-item">
+      <div class="alert alert-info" role="alert" i18n="@@ThereAreNoItems">
+        There are no items to display.
+      </div>
+    </li> -->
+  </ul>

@@ -1,0 +1,145 @@
+<div class="container"> 
+  <div class="row mt-3">
+    <div class="col">
+
+
+<div class="page-header">
+  <h3>
+      {{pageTitle}}
+  </h3>
+</div>
+
+<div class="{{alertType}}" *ngIf="showAlert">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+  {{pageMessage}}
+</div>
+
+<form class="form-group" [formGroup]="taskForm">
+  <div class="form-group row">
+      <label for="project" class="col-sm-2 col-form-label" i18n="@@Project"> Project <span class="mandatory">*</span></label>
+      <div class="col-sm-6">
+          <div class="input-group">
+              <input type="hidden" name="projectId" id="projectId" formControlName="projectId">
+              <input type="text" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" name="projectName"
+                  formControlName="projectName" readonly id="projectName">
+
+              <span class="input-group-btn">                  
+                  <button class="btn btn-primary btn-block"  data-toggle="modal" data-target="#projectlisting">Search</button>
+              </span>
+
+              <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
+                  <div *ngIf="f.projectName.errors.required" i18n="@@ProjectNameRequired">Project Name is required</div>
+              </div>
+          </div><!-- /input-group -->
+      </div>
+  </div>
+
+  <div class="form-group row">
+      <input type="hidden" name="taskId" id="taskId" formControlName="taskId">
+      <label for="taskName" class="col-sm-2 col-form-label"> <span i18n="@@Task">Task </span> <span class="mandatory">*</span> </label>
+      <div class="col-sm-6">
+
+          <input type="text" class="form-control" id="taskName" formControlName="taskName" maxlength="50" name="taskName" placeholder="Task Name"
+              [ngClass]="{ 'is-invalid': submitted && f.taskName.errors }">
+
+          <div *ngIf="submitted && f.taskName.errors" class="invalid-feedback">
+              <div *ngIf="f.taskName.errors.required" i18n="@@TaskNameRequired">Task Name is required</div>
+          </div>
+
+      </div>
+  </div>
+
+  <div class="form-group row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-3">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="parentTask" (change)="onParentTaskSelected($event)">
+              <label class="form-check-label" for="gridCheck1" i18n="@@ParentTask"> Parent Task</label>
+          </div>
+      </div>
+  </div>
+
+  <div class="form-group row">
+      <label for="priority" class="col-sm-2 col-form-label" i18n="@@Priority">Priority</label>
+      <div class="col-sm-4">
+          <div class="input-group">
+              <span class="inline">0</span>
+              <input type="range" class="form-control" id="priority" formControlName="priority" name="priority" min="0" max="100" value="0"
+                  (change)="onPriorityChange($event)" step="1">&nbsp; &nbsp; <span class="inline">{{priority}}</span>
+          </div>
+
+      </div>
+
+  </div>
+
+  <div class="form-group row">
+      <label for="parentTask" class="col-sm-2 col-form-label" i18n="@@ParentTask">Parent Task</label>
+      <div class="col-sm-6">
+          <div class="input-group">
+              <input type="hidden" name="parentTaskId" id="parentTaskId" formControlName="parentTaskId">
+
+              <input type="text" name="parentTaskName" readonly formControlName="parentTaskName" id="parentTaskName" class="form-control">
+              <span class="input-group-btn">
+                    <button class="btn btn-primary btn-block"  data-toggle="modal" data-target="#parenttasklisting">Search</button>
+              </span>
+          </div>
+      </div>
+  </div>
+
+
+  <div class="form-group row">
+      <label for="startDate" class="col-sm-2 col-form-label" i18n="@@StartDate">Start Date</label>
+
+      <div class="col-sm-3">
+          <input type="date" class="form-control" formControlName="startDate" name="startDate" />
+      </div>
+
+      <div class="col-sm-1"><label class="form-check-label" for="endDate" i18n="@@EndDate">End date</label></div>
+      <div class="col-sm-3">
+          <input type="date" class="form-control" formControlName="endDate" name="endDate" />
+      </div>
+
+  </div>
+
+  <div class="form-group row">
+      <label for="managerName" class="col-sm-2 col-form-label" i18n="@@User">User</label>
+      <div class="col-sm-6">
+          <div class="input-group">
+              <input type="hidden" name="managerId" id="managerId" formControlName="managerId">
+              <input type="text" name="managerName" id="managerName" readonly formControlName="managerName" class="form-control">
+              <span class="input-group-btn">                  
+                  <button class="btn btn-primary btn-block"  data-toggle="modal" data-target="#taskuserlisting">Search</button>
+              </span>
+          </div>
+      </div>
+  </div>
+  <div class="row">      
+      <div class="col-sm-2">
+          <button class="btn btn-success btn-block" type="button" (click)="onSubmit()">{{addButtonTitle}}</button>
+      </div>
+      <div class="col-sm-2">
+          <button class="btn btn-default btn-block" type="button" (click)="resetForm()">Reset</button>
+      </div>
+  </div>
+</form>
+</div>
+</div>
+</div>
+
+<div>
+<app-userlisting listingmodalId="projectlisting"  [projects]="projects"   (selectedvalue) = "selectedprojects($event)">
+    <div head style="font-weight: bold;">Select Projects</div>
+</app-userlisting>
+</div>
+
+<div>
+<app-userlisting listingmodalId="taskuserlisting"  [userlistings]="managers"   (selectedvalue) = "selectedmanagers($event)">
+    <div head style="font-weight: bold;">Select Managers</div>
+</app-userlisting>
+</div>
+
+<div>
+<app-userlisting listingmodalId="parenttasklisting"  [tasks]="parentTasks"   (selectedvalue) = "selectedparenttasks($event)">
+    <div head style="font-weight: bold;">Select Parent Tasks</div>
+</app-userlisting>
+</div>

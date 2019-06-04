@@ -1,0 +1,6 @@
+input.checked[type="radio"]{visibility:hidden;}
+
+.maindiv{
+margin-left: 150px;
+margin-right: 150px;
+}
